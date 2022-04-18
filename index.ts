@@ -133,9 +133,10 @@ async function textToBinary(inputFilename: string, outputFilename: string) {
       messageEntry.textboxYPos = messages[i].textboxYPos || 0;
     }
     const messageText = (typeof message === "string") ? message : message.text;
-    messageEntry.numChars = messageText.length;
+    const messageBuffer = Buffer.from(messageText, "utf8");
+    messageEntry.numChars = messageBuffer.length;
     await writeToStream(messageEntry.asDataView());
-    await writeToStream(Buffer.from(messageText, "utf8"));
+    await writeToStream(messageBuffer);
 
     if (messageIds.has(messageEntry.id)) {
       console.warn(`Warning: duplicate message id found: ${messageEntry.id}`);
